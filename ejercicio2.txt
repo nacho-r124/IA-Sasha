@@ -1,0 +1,210 @@
+============================================================
+a) ¿Cuál es la definición de la función acción-costo de un agente?
+============================================================
+
+La función acción-costo es un proceso en el que el agente evalúa los 
+resultados del modelo de IA, comparando con un valor métrico la diferencia 
+entre el resultado esperado y el resultado del modelo, con el objetivo de 
+minimizar esta diferencia.
+
+Esto permite que el modelo con cada nuevo intento sea más preciso y ayuda 
+para saber qué tan preciso es el modelo actual.
+
+De forma más formal, si:
+
+    s  = estado actual
+    a  = acción aplicada
+    s' = resultado de aplicar la acción
+
+Se puede representar como:
+
+    c(s,a,s')
+
+que representa el costo de aplicar la acción a en el estado s para llegar a s'.
+
+Si se tiene una secuencia de estados:
+
+    s0 → s1 → s2 → ... → sn
+
+El costo acumulado sería:
+
+    g(n) = Σ c(si, ai, si+1)
+
+
+============================================================
+b) ¿Cómo funciona un algoritmo de búsqueda?
+============================================================
+
+Existen dos tipos de algoritmos de búsqueda, que se centran en informados y 
+desinformados.
+
+------------------------------------------------------------
+1) Búsqueda Desinformada
+------------------------------------------------------------
+
+No se basan en ningún criterio acerca del cual tengan que buscar, tratan 
+a todas las opciones por igual y solo se guían por criterios muy básicos 
+y generales.
+
+Existen 3 sub-tipos de búsqueda desinformada:
+
+1.1 Búsqueda Profunda (DFS)
+
+Explora al fondo una ruta hasta que no haya ningún otro nodo disponible, 
+generalmente utilizando pilas para rastrear su camino una vez tenga que 
+regresar. Puede llegar a contener ciclos y quedarse estancado en un bucle.
+
+Si:
+
+    Children(S) = {A, B, C}
+
+DFS podría explorar:
+
+    S → A → A1 → A2 → ...
+
+antes de considerar B o C.
+
+
+1.2 Búsqueda en Amplitud (BFS)
+
+Investiga cada nodo vecino y cada posible ruta antes de descender al 
+siguiente nivel de profundidad.
+
+La desventaja es que puede llegar a ser muy pesado en cuanto memoria, 
+ya que guarda todos los nodos anteriores visitados.
+
+Explora por niveles:
+
+    Nivel 0: {S}
+    Nivel 1: {A, B, C}
+    Nivel 2: {A1, A2, B1, C1, C2}
+
+
+1.3 Búsqueda de Costos Uniformes (UCS)
+
+Siempre se dirige al nodo con menor costo, acumulando los anteriores 
+nodos visitados para, en caso de encontrarse en un nodo aislado, 
+siempre dirigirse al nodo con menor costo acumulado.
+
+Formalmente selecciona:
+
+    arg min g(n)
+
+
+------------------------------------------------------------
+2) Búsqueda Informada
+------------------------------------------------------------
+
+Se cuenta con información previa del modelo y analiza una ruta óptima 
+en vez del azar, utilizando una heurística h(n).
+
+Existen 3 sub-tipos de búsqueda informada:
+
+2.1 Búsqueda Codiciosa
+
+Ignora costos tomados y costos por tomar, solamente toma el camino que 
+parece más directo hasta la meta.
+
+Selecciona:
+
+    arg min h(n)
+
+
+2.2 Búsqueda de Árboles
+
+Explora las rutas en modo de árboles, así cada ruta es independiente 
+y no se rastrean los anteriores nodos visitados.
+
+
+2.3 Búsqueda de Gráficos
+
+Busca y evalúa tanto el costo tomado antes, como el costo del próximo 
+nodo, garantizando la ruta más óptima hacia el objetivo y evitando ciclos.
+
+
+============================================================
+c) Tipos de nodo en el espacio de estados
+============================================================
+
+Un nodo corresponde a un estado en el espacio de estados de nuestro problema.
+
+Si representamos el problema como un grafo:
+
+    G = (V, E)
+
+donde:
+
+    V = conjunto de estados
+    E ⊆ V × V = conjunto de transiciones
+
+------------------------------------------------------------
+Parent Node
+------------------------------------------------------------
+
+Un parent node en el contexto de estados es aquel en el que, si te fijas 
+en un nodo S, y S es alcanzable por un P en un paso directo, entonces P 
+es parent node.
+
+Es decir:
+
+    (P, S) ∈ E
+
+P es el nodo padre inmediato de S.
+
+
+------------------------------------------------------------
+Child Node
+------------------------------------------------------------
+
+Un child node es todo aquel S tal que P puede alcanzar a S en un paso 
+sin retroceder.
+
+Formalmente:
+
+    (P, S) ∈ E
+
+Entonces S es hijo de P.
+
+
+------------------------------------------------------------
+Successor Node
+------------------------------------------------------------
+
+Un successor node son aquellos C que para algún S fijo, tal que si 
+recorres solo un paso desde S llegas a C.
+
+El conjunto de sucesores se puede definir como:
+
+    Successors(S) = { s' ∈ V | (S, s') ∈ E }
+
+Es decir, todos los nodos alcanzables en un solo paso desde S.
+
+
+============================================================
+d) ¿Qué es el factor de ramificación (branching factor)?
+============================================================
+
+Es una medida que representa el número promedio de child nodes o 
+movimientos que tiene cada nodo en un árbol o en un algoritmo de búsqueda.
+
+Sirve para analizar la complejidad computacional del algoritmo.
+
+Se suele representar como:
+
+    b = número promedio de hijos por nodo
+
+Si:
+
+    b = factor de ramificación
+    d = profundidad de la solución
+
+El número aproximado de nodos generados es:
+
+    O(b^d)
+
+Por ejemplo:
+
+    Si b = 3 y d = 4
+    entonces 3^4 = 81 nodos
+
+Esto muestra cómo el crecimiento es exponencial.
